@@ -7,7 +7,6 @@ const validateBookingInput = async (req, res, next) => {
     const Booking = new Booking(req.body);
     await Booking.validate();
 
-    // If validation passes, set the validated user object on the request object
     next();
   } catch (error) {
     // If validation fails, return the error response

@@ -18,7 +18,7 @@ router.get('/:id', async (req, res) => {
 }
 );
 
-router.post('/', async (req, res) => {
+router.post('/', validateBookingInput,async (req, res) => {
     let owner= await User.findById(req.body.ownerId);
     let property =await Property.findById(req.body.propertyId);
 

@@ -7,7 +7,6 @@ const validatePropertyInput = async (req, res, next) => {
     const property = new Property(req.body);
     await property.validate();
 
-    // If validation passes, set the validated user object on the request object
     next();
   } catch (error) {
     // If validation fails, return the error response

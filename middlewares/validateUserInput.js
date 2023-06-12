@@ -7,8 +7,6 @@ const validateUserInput = async (req, res, next) => {
     const user = new User(req.body);
     await user.validate();
 
-    // If validation passes, set the validated user object on the request object
-    req.validatedUser = user;
     next();
   } catch (error) {
     // If validation fails, return the error response
