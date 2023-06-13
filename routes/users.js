@@ -38,8 +38,8 @@ router.post('/register',validateUserInput, async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-      const { username, password } = req.body;
-      const user = await User.findOne({ username });
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
       if (!user) {
         return res.status(401).json({ message: 'Authentication failed' });
       }
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
       if (!isPasswordValid) {
         return res.status(401).json({ message: 'Authentication failed' });
       }
-      const token = jwt.sign({ username: user.username }, config.secretKey, { expiresIn: config.expiresIn });
+      const token = jwt.sign({ email: user.email }, config.secretKey, { expiresIn: config.expiresIn });
       res.json({ token });
     } catch (error) {
       res.status(500).json({ message: 'Error authenticating user' });
