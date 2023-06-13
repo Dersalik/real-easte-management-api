@@ -4,6 +4,8 @@ const { User } = require('../models/User');
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const validateUserInput = require('../middlewares/validateUserInput');
+const jwt = require('jsonwebtoken');
+const config = require('../config/config.js');
 
 router.get('/', async (req, res) => {
     const users = await User.find().sort('name');
@@ -18,7 +20,7 @@ router.get('/:id', async (req, res) => {
     res.status(200).send(user);
 });
 
-router.post('/',validateUserInput, async (req, res) => {
+router.post('/register',validateUserInput, async (req, res) => {
 
 
     let user = await User.findOne({ email: req.body.email });
@@ -31,6 +33,26 @@ router.post('/',validateUserInput, async (req, res) => {
 
     res.send(_.pick(user, ['name', 'email', 'isAdmin']));
 });
+
+
+
+router.post('/login', async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      const user = await User.findOne({ username });
+      if (!user) {
+        return res.status(401).json({ message: 'Authentication failed' });
+      }
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ message: 'Authentication failed' });
+      }
+      const token = jwt.sign({ username: user.username }, config.secretKey, { expiresIn: config.expiresIn });
+      res.json({ token });
+    } catch (error) {
+      res.status(500).json({ message: 'Error authenticating user' });
+    }
+  });
 
 
 router.put('/:id', async (req, res) => {

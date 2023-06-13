@@ -67,3 +67,5 @@ router.delete('/:id', async (req, res) => {
     res.status(200).send(booking);
 }
 );
+
+module.exports = router;

@@ -5,13 +5,17 @@ const connectDB = require('./config/db');
 const app = express();
 const users = require('./routes/users');
 const properties = require('./routes/properties');
-const bookings = require('./routes/bookings');
+const Bookings = require('./routes/bookings');
+const authenticateToken = require('./middlewares/authenticateToken.js');
+
 connectDB();
 app.use(express.json());
 
+app.use(authenticateToken);
+
 app.use('/api/users', users);
-app.use('/api/properties', properties);
-app.use('/api/bookings', bookings);
+app.use('/api/properties',properties);
+app.use('/api/bookings' ,Bookings);
 
 const PORT = process.env.PORT || 5000;
 
