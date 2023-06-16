@@ -16,6 +16,7 @@ function authenticateToken(req, res, next) {
         next();
         return;
     } 
+    
     else if (!token) {
       return res.status(401).json({ message: 'Authentication required' });}
     else {
