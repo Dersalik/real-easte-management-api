@@ -5,19 +5,26 @@ const { User } = require('../models/User');
 const booking = require('../models/Booking');
 const validateBookingInput = require('../middlewares/validateBookingInput');
 
+// @desc   Get all bookings
+// @route  GET /api/bookings
+// @access authenticated user
 router.get('/', async (req, res) => {
     const bookings = await booking.find().sort('name');
     res.status(200).send(bookings);
 }
 );
-
+// @desc   Get a booking
+// @route  GET /api/bookings/:id
+// @access authenticated user
 router.get('/:id', async (req, res) => {
     const booking = await booking.findById(req.params.id);
     if (!booking) return res.status(404).send('The booking with the given ID was not found.');
     res.status(200).send(booking);
 }
 );
-
+//  @desc   Create a booking
+//  @route  POST /api/bookings
+//  @access authenticated user
 router.post('/', validateBookingInput,async (req, res) => {
     let owner= await User.findById(req.body.ownerId);
     let property =await Property.findById(req.body.propertyId);
@@ -32,7 +39,9 @@ router.post('/', validateBookingInput,async (req, res) => {
 }
 );
 
-
+// @desc   Update a booking
+// @route  PUT /api/bookings/:id
+// @access authenticated user
 router.put('/:id', async (req, res) => {
 
     let owner= await User.findById(req.body.ownerId);
@@ -60,6 +69,9 @@ router.put('/:id', async (req, res) => {
 }
 );
 
+// @desc   Delete a booking
+// @route  DELETE /api/bookings/:id
+// @access authenticated user
 router.delete('/:id', async (req, res) => {
 
     const booking = await booking.findByIdAndRemove(req.params.id);

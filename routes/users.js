@@ -7,19 +7,27 @@ const validateUserInput = require('../middlewares/validateUserInput');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config.js');
 
+
+// @desc   Get all users
+// @route  GET /api/users
+// @access authenticated user
 router.get('/', async (req, res) => {
     const users = await User.find().sort('name');
     res.status(200).send(users);
 }
 );
-
+// @desc   Get a user
+// @route  GET /api/users/:id
+// @access authenticated user
 router.get('/:id', async (req, res) => {
 
     const user= await User.findById(req.params.id);
     if (!user) return res.status(404).send('The user with the given ID was not found.');
     res.status(200).send(user);
 });
-
+// @desc   Register a user
+// @route  POST /api/users/register
+// @access public
 router.post('/register',validateUserInput, async (req, res) => {
 
 
@@ -35,7 +43,9 @@ router.post('/register',validateUserInput, async (req, res) => {
 });
 
 
-
+// @desc   Login a user
+// @route  POST /api/users/login
+// @access public
 router.post('/login', async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -54,7 +64,9 @@ router.post('/login', async (req, res) => {
     }
   });
 
-
+// @desc   Update a user
+// @route  PUT /api/users/:id
+// @access authenticated user
 router.put('/:id', async (req, res) => {
 
 const user= await User.findById(req.params.id);
@@ -79,6 +91,9 @@ if (!user) return res.status(404).send('The user with the given ID was not found
 
 });
 
+// @desc   Delete a user
+// @route  DELETE /api/users/:id
+// @access authenticated user
 router.delete('/:id', async (req, res) => {
     const user= await User.findById(req.params.id);
     if (!user) return res.status(404).send('The user with the given ID was not found.');

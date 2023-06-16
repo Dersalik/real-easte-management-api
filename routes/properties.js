@@ -4,12 +4,17 @@ const { Property } = require('../models/Property');
 const { User } = require('../models/User');
 const validatePropertyInput = require('../middlewares/validatePropertyInput');
 
+// @desc   Get all properties
+// @route  GET /api/properties
+// @access authenticated user
 router.get('/', async (req, res) => {
     const properties = await Property.find().sort('name');
     res.status(200).send(properties);
 }
 );
-
+// @desc   Get a property
+// @route  GET /api/properties/:id
+// @access authenticated user
 router.get('/:id', async (req, res) => {
       
     
@@ -19,6 +24,9 @@ router.get('/:id', async (req, res) => {
     }
 );
 
+//  @desc   Create a property
+//  @route  POST /api/properties
+//  @access authenticated user
 router.post('/',validatePropertyInput, async (req, res) => {
 
     let owner= await User.findById(req.body.ownerId);
@@ -33,7 +41,9 @@ if (!owner) return res.status(404).send('The user with the given ID was not foun
 }   
 );
 
-
+// @desc   Update a property
+// @route  PUT /api/properties/:id
+// @access authenticated user
 router.put('/:id', async (req, res) => {
 
 
@@ -61,7 +71,9 @@ if (!owner) return res.status(404).send('The user with the given ID was not foun
 }
 );
 
-
+// @desc   Delete a property
+// @route  DELETE /api/properties/:id
+// @access authenticated user
 router.delete('/:id', async (req, res) => {
     
         const property = await Property.findByIdAndRemove(req.params.id);
